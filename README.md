@@ -57,7 +57,11 @@ See the [official Claude Code skills documentation](https://code.claude.com/docs
 
 ## Validation and limitations
 
-The skill passed structural validation and two illustrative single-agent research-case exercises: an uncontrolled education intervention and an observational biomarker/prediction study. These exercises were run outside Claude. They are not a benchmark, a test of the full multi-agent workflow, or evidence that this approach improves scientific accuracy.
+The skill passed structural validation and two illustrative single-agent research-case exercises: an uncontrolled education intervention and an observational biomarker/prediction study. These exercises were run outside Claude.
+
+The full multi-agent workflow has been run once in Claude Code, on an evidence question about vitamin D supplementation and acute respiratory infections, using five PubMed abstracts, five advisors, and two cross-reviewers. That run led to the current dispatch templates: advisors exceeded the word limit and largely repeated one another, three of five quoted unlabeled statistics from a garbled abstract as interaction p-values, and the cross-reviewers found an inference shared by all five that the packet did not support. The revised templates have not been re-run.
+
+None of this is a benchmark or evidence that this approach improves scientific accuracy.
 
 No external packages, API keys, or custom scripts are required by the skill itself. Browsing, database access, and subagents depend on the host environment. Without retrieval, the skill limits its conclusions to provided material and reports that external literature was not verified.
 

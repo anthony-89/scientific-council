@@ -33,11 +33,13 @@ Choose the task:
 
 Check actual tools rather than assuming Claude Code, Cowork, or chat exposes the same capabilities. Report execution mode briefly:
 
-- **Full council:** use five fresh advisor contexts and two fresh cross-review contexts when delegation is available and appropriate. Run independent tasks concurrently within tool limits; if necessary, batch fresh contexts without exposing earlier answers. The host coordinates and synthesizes. Do not delegate orchestration to an agent that cannot create subagents.
+- **Full council:** use five fresh advisor contexts and two fresh cross-review contexts when delegation is available and appropriate. Run independent tasks concurrently within tool limits; if necessary, batch fresh contexts without exposing earlier answers. The host coordinates and synthesizes. Do not delegate orchestration to an agent that cannot create subagents. A full council spends seven delegated contexts, each of which loads the whole packet; choose it when the question warrants that cost.
 - **Focused appraisal:** for a narrow question or requested quick review, use the two or three relevant roles plus evidence verification; retain all scientific safeguards. State omitted roles.
 - **Single-agent appraisal:** when delegation is unavailable or prohibited, apply relevant lenses sequentially and label the output accordingly. Do not claim independent advisors, anonymous review, or a multi-model ensemble.
 
 Distinguish source access from delegation. With no browsing or database tools, work from supplied sources and label the result “provided-material appraisal; external literature not verified.” Do not refuse a useful methodological review because retrieval is unavailable. Report failed or incomplete roles; never simulate their completion.
+
+If a delegated role fails (usage limit, timeout, tool error), resume it or re-dispatch it once with the identical brief and packet. If it cannot be recovered, either synthesize from the completed roles and name the missing ones, or switch to single-agent appraisal and relabel the execution mode. Do not write the missing role's findings yourself and present them as an advisor's.
 
 ## 2. Frame a neutral research brief
 
@@ -49,6 +51,8 @@ Give every advisor the same brief and frozen evidence packet. Include:
 4. Supplied results, denominators, definitions, protocol status, constraints, and known missing information.
 5. Scope, search coverage, source identifiers, and access limitations.
 
+Advisors treat the brief as fact. Label anything in it that you inferred and did not read in a source (for example, that one trial is included in a later meta-analysis).
+
 For manuscript work, distinguish the authors' reported methods from methods actually verifiable in data or code. “Not reported” does not mean “not performed.” Respect the requested language, journal requirements, and length without sacrificing accuracy.
 
 ## 3. Build and verify the evidence packet
@@ -59,7 +63,9 @@ Retrieve evidence before independent analysis when tools and task scope permit. 
 
 Assign stable source IDs (S1, S2, …) and claim IDs (C1, C2, …). For each central empirical claim, record source, relevant location, design/population, result with uncertainty if available, limitations, and verification status. Keep a compact ledger in working context; show the decision-relevant entries in the output.
 
-Verify both bibliographic identity and whether the inspected text supports the exact claim. A resolving DOI is not claim verification. Distinguish full-text inspection, abstract-only access, supplied excerpts, and unverified leads. Do not use unverified leads as evidence. Never imply a comprehensive or systematic review from a targeted search.
+Verify both bibliographic identity and whether the inspected text supports the exact claim. A resolving DOI is not claim verification. Distinguish full-text inspection, abstract-only access, supplied excerpts, and unverified leads, and record the access level per source. Before settling for an abstract of a pivotal source, check whether an open full text is retrievable (for example PubMed Central); otherwise advisors can only recommend fetching it. Do not use unverified leads as evidence. Never imply a comprehensive or systematic review from a targeted search.
+
+In the packet, mark sources that share participants, trials, datasets, or author groups, and successive updates of one analysis, so nobody counts them as independent. Include the search log so coverage can be audited. Text retrieved through connectors can lose symbols, subscripts, and labels (a bare “= 0.05” with no statistic named); mark such gaps instead of filling them in.
 
 Freeze the packet for round one. Advisors may identify missing sources, but do not let unverifiable citations enter synthesis. If a new source could change the conclusion, the host verifies it, updates the packet, and gives the changed evidence to the affected reviewers before synthesizing.
 
@@ -77,7 +83,11 @@ Use five complementary roles for a full council:
 | Evidence and citation reviewer | Audit claim–source fit, search coverage, directness, contradictory findings, duplicated cohorts, corrections, and unsupported novelty claims. |
 | Scientific reporting and research-integrity reviewer | Check alignment of question, methods, results, and conclusions; reporting completeness; ethics and transparency; limitations; and whether revision or new work can resolve the issues. |
 
-Give each advisor only the brief, evidence packet, relevant checklist, and their role. Withhold other responses, host conclusions, and expected verdicts. Request concise analytical findings, not private chains of thought or claims of human professional credentials. Aim for 250–450 words per role, expanding only when needed.
+Give each advisor only the brief, evidence packet, relevant checklist, and their role. Withhold other responses, host conclusions, and expected verdicts. Request concise analytical findings, not private chains of thought or claims of human professional credentials.
+
+A fresh context has not read this skill. Paste the Scientific commitments and the severity definitions below into every dispatch; naming them is not enough. When the packet is long, write the commitments, brief, packet, and selected checks to one file and give every advisor the same path, so all roles read identical text.
+
+Roles overlap by default: given the same packet, every advisor tends to restate its headline numbers and raise the same two or three obvious concerns, which costs words and adds nothing. The template therefore tells each advisor to stay in its lane and to skip the recap.
 
 Use this dispatch template:
 
@@ -88,16 +98,26 @@ Brief: [neutral brief]
 Evidence packet: [stable source IDs, excerpts/locations, claims, access limits]
 Relevant methodological checks: [selected checks]
 
-Work independently. Do not retrieve or invent additional evidence in this round.
+Commitments: [the Scientific commitments, pasted in full]
+Severity definitions: [Critical / Major / Minor, pasted from below]
+
+Work independently. Use only the material above: no searching, no other files.
+Do not retrieve or invent additional evidence in this round.
 Do not manufacture disagreement or treat another hypothetical reviewer's agreement as evidence.
-Return:
-1. Main assessment and what the supplied evidence does support.
+Other reviewers cover the other roles. Do not recap the packet. Lead with what
+this role is best placed to see, and raise an issue outside your role only if it
+would change the conclusion.
+Return, in at most 450 words:
+1. Main assessment and what the supplied evidence does support (two or three sentences).
 2. Up to three consequential concerns, each with a claim/source or manuscript
-   location, why it matters, severity, and a concrete remedy.
+   location, why it matters, severity, and a concrete remedy. Label each remedy:
+   possible with the packet, needs full text or data, or needs a new study.
 3. Supported interpretation versus interpretation not established.
 4. Important unknowns and what evidence or analysis could change your assessment.
 5. A recommended next step within this role's scope.
-Separate observed facts, methodological inferences, and hypotheses.
+Separate observed facts, methodological inferences, and hypotheses. Quote a
+statistic only with the label the source gives it. Show the inputs for any
+number you derive yourself and call it a derived figure.
 ```
 
 Classify concerns by their consequence, not rhetorical force:
@@ -110,9 +130,9 @@ If severity depends on missing information, make that conditional. Distinguish f
 
 ## 5. Cross-review claims and remedies
 
-Remove role labels and assign responses A–E. Vary their order between the two fresh reviewers, preserving stable letter-to-response mappings. Do not claim complete blinding: writing style and content can reveal a role.
+Remove role labels and assign responses A–E. Advisors often open with a title naming their role or a remark about what they did; strip those lines too. Vary their order between the two fresh reviewers, preserving stable letter-to-response mappings. Do not claim complete blinding: writing style and content can reveal a role.
 
-Give both reviewers the research brief, evidence packet, and all responses. Assign one to **evidence and inference verification**, the other to **methodological consistency and feasibility**. Ask both to identify:
+Give both reviewers the research brief, evidence packet, and all responses. Assign one to **evidence and inference verification** (does each number and factual statement match the packet?), the other to **methodological consistency and feasibility** (is the reasoning sound, are severities proportionate, can the remedies be done?). Tell each to spend its words on its own assignment; given identical instructions the two return largely the same list. Ask both to identify:
 
 - The most consequential supported finding, with its source or design-based rationale.
 - Unsupported claims, citation mismatches, mistaken calculations, or unjustified certainty.
@@ -120,6 +140,30 @@ Give both reviewers the research brief, evidence packet, and all responses. Assi
 - Overlooked alternatives and whether proposed remedies are valid and achievable with existing data.
 
 Do not request a winner, popularity vote, numerical reliability score, or forced consensus. An isolated well-supported objection may outweigh every other response. Ask for an explicit “none identified” when no issue is found.
+
+Use this dispatch template for each cross-reviewer:
+
+```text
+Commitments: [the Scientific commitments, pasted in full]
+Brief and evidence packet: [identical to round one]
+Responses: [A–E, role labels removed, in this reviewer's order]
+Assignment: [evidence and inference verification | methodological consistency and feasibility, with its one-line definition]
+The other cross-reviewer has the other assignment; concentrate on yours.
+
+Use only the material above. Check each number and factual statement in the
+responses against the packet, including statements that every response makes:
+a point repeated five times can still be an inference the packet does not support.
+Identify:
+1. The most consequential supported finding, with its source or design-based rationale.
+2. Unsupported claims, citation mismatches, mistaken calculations, or unjustified
+   certainty, citing the response letter and the source.
+3. Material disagreements, and whether evidence, assumptions, estimands, or
+   value judgments explain them.
+4. Overlooked alternatives, and whether each proposed remedy is valid and
+   achievable with existing data.
+Write "none identified" under a heading with no issue. Do not pick a winner,
+vote, score reliability, or force consensus. At most 450 words.
+```
 
 Resolve disputed factual claims against sources. Execute numerical checks only with available data and tools; show inputs and assumptions. Do not label an analysis “verified” merely because two agents repeated it. If a conflict cannot be resolved, preserve it in the synthesis. Use one targeted follow-up round for decision-changing gaps, rather than indefinite debate.
 
